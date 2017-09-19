@@ -1,20 +1,20 @@
 package com.codepath.project.nytimessearch.Activites;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
 import com.codepath.project.nytimessearch.Article;
 import com.codepath.project.nytimessearch.ArticleArrayAdapter;
+import com.codepath.project.nytimessearch.Contact;
 import com.codepath.project.nytimessearch.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -35,15 +35,30 @@ public class SearchActivity extends AppCompatActivity {
     Button btnSearch;
     ArrayList<Article> articles;
     ArticleArrayAdapter adapter;
+    ArrayList<Contact> contacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         setupViews();
+
+        adapter.notifyDataSetChanged();*/
+
+
+        // Attach the adapter to the recyclerview to populate items
+        RecyclerView rvResults = (RecyclerView) findViewById(R.id.rvResults);
+        contacts = Contact.createContactsList(20);
+        // Create adapter passing in the sample user data
+        adapter = new ArticleArrayAdapter(this, contacts);
+        rvResults.setAdapter(adapter);
+
+        // Set layout manager to position the items
+        rvResults.setLayoutManager(new LinearLayoutManager(this));
+        // That's all!
 
 
     }
@@ -51,13 +66,25 @@ public class SearchActivity extends AppCompatActivity {
     public void setupViews() {
 
         etQuery = (TextView) findViewById(R.id.tvText);
-        GridView gvResults = (GridView) findViewById(R.id.gvResults);
+        //GridView gvResults = (GridView) findViewById(R.id.gvResults);
+        RecyclerView rvResults = (RecyclerView) findViewById(R.id.rvResults);
+
+
         Button btnSearch = (Button) findViewById(R.id.btnSearch);
         articles = new ArrayList<>();
-        adapter = new ArticleArrayAdapter(this, articles);
-        gvResults.setAdapter(adapter);
+        //adapter = new ArticleArrayAdapter(this, articles);
+
+        /*
+        JSONArray articlesResults = null;
+        ArrayList<Article> results = Article.fromJsonArray(articlesResults);
+        articles.addAll(results);*/
+
+
+        rvResults.setAdapter(adapter);
+        rvResults.setLayoutManager(new LinearLayoutManager(this));
+
         //articles.clear();
-        gvResults.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+        /*rvResults.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
@@ -66,10 +93,7 @@ public class SearchActivity extends AppCompatActivity {
                 startActivity(i);
 
             }
-        });
-
-
-
+        });*/
     }
 
     @Override
@@ -95,6 +119,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void onArticlesSearch(View view) {
+        Log.d("debug", "onArticlesSearch");
         String query = etQuery.getText().toString();
         //Toast.makeText(this, "searching for " + query, Toast.LENGTH_LONG).show();
         AsyncHttpClient client = new AsyncHttpClient();
@@ -105,16 +130,23 @@ public class SearchActivity extends AppCompatActivity {
         params.put("page", 0);
         params.put("q", query);
 
+
+
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 //super.onSuccess(statusCode, headers, response);
-                Log.d("debug", "hai");
+                Log.d("debug", "on success");
                 JSONArray articlesResults = null;
                 try {
                     articlesResults = response.getJSONObject("response").getJSONArray("docs");
                     Log.d("debug","got results");
-                    adapter.addAll(Article.fromJsonArray(articlesResults));
+                    //adapter.addAll(Article.fromJsonArray(articlesResults));
+                    ArrayList<Article> results = Article.fromJsonArray(articlesResults);
+                    articles.addAll(results);
+                    Log.d("debug", "notify adapter");
+                    adapter.notifyDataSetChanged();
+
                     Log.d("debug", articles.toString());
                     //adapter.notifyDataSetChanged();
 
@@ -124,8 +156,8 @@ public class SearchActivity extends AppCompatActivity {
             }
 
         });
-
-
-
     }
+
+
+
 }

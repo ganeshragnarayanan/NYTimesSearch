@@ -39,15 +39,12 @@
         tools:layout_editor_absoluteY="16dp"
         android:onClick="onArticlesSearch"/>
 
-    <GridView
-        android:id="@+id/gvResults"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvResults"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/btnSearch"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp" />
-
-    
+        />
 
 
 </RelativeLayout>

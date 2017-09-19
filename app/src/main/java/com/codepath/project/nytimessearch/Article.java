@@ -1,5 +1,7 @@
 package com.codepath.project.nytimessearch;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,6 +60,7 @@ public class Article {
                 e.printStackTrace();
             }
         }
+        Log.d("debug10", Integer.toString(results.size()));
         return results;
     }
 
