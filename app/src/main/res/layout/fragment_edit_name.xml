@@ -1,24 +1,92 @@
 <!-- fragment_edit_name.xml -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     android:id="@+id/edit_name"
-    android:layout_width="wrap_content" android:layout_height="wrap_content"
-    android:layout_gravity="center" android:orientation="vertical"  >
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_gravity="center" android:orientation="vertical"
+    android:minWidth="1000dp"
+    android:minHeight="450dp">
 
     <TextView
-        android:id="@+id/lbl_your_name" android:text="Your name"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="Begin Date" />
 
     <EditText
-        android:id="@+id/txt_your_name"
-        android:layout_width="match_parent"  android:layout_height="wrap_content"
-        android:inputType="text"
-        android:imeOptions="actionDone" />
+        android:id="@+id/etDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDate"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/tvSortOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:text="Sort Order"
+        android:layout_below="@+id/etDate"
+        android:layout_alignLeft="@+id/tvDate"
+        android:layout_alignStart="@+id/tvDate" />
+
+    <Spinner
+        android:id="@+id/spinValues"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvSortOrder"
+        android:layout_centerHorizontal="true"
+        android:entries="@array/spinnerItems"/>
+
+
+    <CheckBox
+        android:id="@+id/cbValues1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Arts"
+        android:layout_below="@+id/spinValues"
+        android:layout_alignRight="@+id/etDate"
+        android:layout_alignEnd="@+id/etDate"
+        android:layout_marginTop="22dp" />
+
+    <CheckBox
+        android:id="@+id/cbValues2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fashion and Style"
+        android:layout_below="@+id/cbValues1"
+        android:layout_alignLeft="@+id/cbValues1"
+        android:layout_alignStart="@+id/cbValues1" />
+
+    <CheckBox
+        android:id="@+id/cbValues3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sports"
+        android:layout_below="@+id/cbValues2"
+        android:layout_alignLeft="@+id/cbValues2"
+        android:layout_alignStart="@+id/cbValues2" />
 
     <Button
         android:id="@+id/btnSubmit"
-        android:layout_width="match_parent"  android:layout_height="wrap_content"
-        android:inputType="text"
-        android:imeOptions="actionDone" />
-</LinearLayout>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="57dp"
+        android:text="SUBMIT"
+        android:layout_below="@+id/cbValues3"
+        android:layout_alignLeft="@+id/tvSortOrder"
+        android:layout_alignStart="@+id/tvSortOrder" />
+
+    <Button
+        android:id="@+id/btnDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/etDate"
+        android:layout_toEndOf="@+id/tvSortOrder"
+        android:layout_toRightOf="@+id/tvSortOrder"
+        android:text="DATE" />
+</RelativeLayout>
