@@ -42,23 +42,19 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);*/
 
         setupViews();
 
-        adapter.notifyDataSetChanged();*/
+//        adapter.notifyDataSetChanged();
 
 
-        // Attach the adapter to the recyclerview to populate items
-        RecyclerView rvResults = (RecyclerView) findViewById(R.id.rvResults);
+        /*RecyclerView rvResults = (RecyclerView) findViewById(R.id.rvResults);
         contacts = Contact.createContactsList(20);
-        // Create adapter passing in the sample user data
         adapter = new ArticleArrayAdapter(this, contacts);
         rvResults.setAdapter(adapter);
 
-        // Set layout manager to position the items
-        rvResults.setLayoutManager(new LinearLayoutManager(this));
-        // That's all!
+        rvResults.setLayoutManager(new LinearLayoutManager(this));*/
 
 
     }
@@ -72,7 +68,7 @@ public class SearchActivity extends AppCompatActivity {
 
         Button btnSearch = (Button) findViewById(R.id.btnSearch);
         articles = new ArrayList<>();
-        //adapter = new ArticleArrayAdapter(this, articles);
+        adapter = new ArticleArrayAdapter(this, articles);
 
         /*
         JSONArray articlesResults = null;

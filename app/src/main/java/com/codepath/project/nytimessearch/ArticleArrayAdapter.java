@@ -19,10 +19,10 @@ import java.util.ArrayList;
 public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapter.ViewHolder> {
 
     private Context mContext;
-    //private ArrayList<Article> mContacts;
-    private ArrayList<Contact> mContacts;
+    private ArrayList<Article> mContacts;
+    //private ArrayList<Contact> mContacts;
 
-    public ArticleArrayAdapter(Context context, ArrayList<Contact> contacts) {
+    public ArticleArrayAdapter(Context context, ArrayList<Article> contacts) {
         mContext = context;
         mContacts = contacts;
         //super(context, android.R.layout.simple_list_item_1, contacts);
@@ -39,8 +39,8 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Log.d("debug", "onBindViewHolder");
-        //Article contact = mContacts.get(position);
-        Contact contact = mContacts.get(position);
+        Article contact = mContacts.get(position);
+        //Contact contact = mContacts.get(position);
         holder.bind(contact);
     }
 
@@ -77,11 +77,11 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
 
         // Involves populating data into the item through holder
         //public void bind(final Article contact) {
-        public void bind(final Contact contact) {
+        public void bind(final Article contact) {
             Log.d("debug", "bind");
             //tvName.setText(contact.getHeadline());
             TextView tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
-            tvTitle.setText("hai");
+            tvTitle.setText(contact.getHeadline());
 
            /* btnOnline.setText("hai");
             btnOnline.setOnClickListener(new View.OnClickListener() {
