@@ -1,9 +1,11 @@
 package com.codepath.project.nytimessearch.Activites;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +17,8 @@ import android.widget.TextView;
 import com.codepath.project.nytimessearch.Article;
 import com.codepath.project.nytimessearch.ArticleArrayAdapter;
 import com.codepath.project.nytimessearch.Contact;
+import com.codepath.project.nytimessearch.EditNameDialogFragment;
+import com.codepath.project.nytimessearch.EndlessRecyclerViewScrollListener;
 import com.codepath.project.nytimessearch.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -28,6 +32,7 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
+
 public class SearchActivity extends AppCompatActivity {
 
     TextView etQuery;
@@ -36,15 +41,23 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<Article> articles;
     ArticleArrayAdapter adapter;
     ArrayList<Contact> contacts;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);*/
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        //getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
+        //getSupportActionBar().setCustomView(R.layout.actionbar_title);
 
         setupViews();
+
+
+
 
 //        adapter.notifyDataSetChanged();
 
@@ -56,6 +69,19 @@ public class SearchActivity extends AppCompatActivity {
 
         rvResults.setLayoutManager(new LinearLayoutManager(this));*/
 
+
+    }
+
+    public void getResult(String searchText) {
+        Log.d("debug", "reachedBack");
+        Log.d("debug", searchText);
+    }
+
+    private void showEditDialog() {
+
+        FragmentManager fm = getSupportFragmentManager();
+        EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance("Some Title");
+        editNameDialogFragment.show(fm, "fragment_edit_name");
 
     }
 
@@ -77,7 +103,28 @@ public class SearchActivity extends AppCompatActivity {
 
 
         rvResults.setAdapter(adapter);
-        rvResults.setLayoutManager(new LinearLayoutManager(this));
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        rvResults.setLayoutManager(linearLayoutManager);
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                //loadNextDataFromApi(page);
+                /*ArrayList<Article> moreContacts = Article.fromJsonArray(10, page);
+                int curSize = adapter.getItemCount();
+                allContacts.addAll(moreContacts);
+
+                view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyItemRangeInserted(curSize, allContacts.size() - 1);
+                    }
+                });*/
+            }
+        };
+        rvResults.addOnScrollListener(scrollListener);
 
         //articles.clear();
         /*rvResults.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
@@ -92,10 +139,22 @@ public class SearchActivity extends AppCompatActivity {
         });*/
     }
 
+    // Append the next page of data into the adapter
+    // This method probably sends out a network request and appends new data items to your adapter.
+    public void loadNextDataFromApi(int offset) {
+        // Send an API request to retrieve appropriate paginated data
+        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
+        //  --> Deserialize and construct new model objects from the API response
+        //  --> Append the new data objects to the existing set of items inside the array of items
+        //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
+
+
         return true;
     }
 
@@ -107,11 +166,16 @@ public class SearchActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onComposeAction(MenuItem mi) {
+        Log.d("debug", "onmenuclick");
+        showEditDialog();
     }
 
     public void onArticlesSearch(View view) {
