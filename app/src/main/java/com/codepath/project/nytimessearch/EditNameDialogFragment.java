@@ -72,12 +72,12 @@ public class EditNameDialogFragment extends DialogFragment  implements DatePicke
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         //mEditText.setOnEditorActionListener(this);
 
-        Button btnExample = (Button) view.findViewById(R.id.btnSubmit);
+        Button btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
         Button btnDate = (Button) view.findViewById(R.id.btnDate);
 
         final EditText etDate = (EditText) view.findViewById(R.id.etDate);
 
-        btnExample.requestFocus();
+        btnSubmit.requestFocus();
 
         btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,18 +93,18 @@ public class EditNameDialogFragment extends DialogFragment  implements DatePicke
                     Log.d("debug", "hai_ondateset");
                     Log.d("debug", Integer.toString(monthOfYear));
                     // here is the place to find the right element
-                    ((SearchActivity) getActivity()).getResult(Integer.toString(year));
+                    ((SearchActivity) getActivity()).getResult("a", "b", "c");
                     etDate.setText("got date");
                 }
             };
         });
 
-        btnExample.setOnClickListener(new View.OnClickListener() {
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("debug", "ondiaglogclick");
                 String searchText = etDate.getText().toString();
-                ((SearchActivity) getActivity()).getResult(searchText);
+                ((SearchActivity) getActivity()).getResult("a", "b", "c");
                 //DialogFragment newFragment = new com.cfsuman.me.androidcodesnippets.DatePickerFragment();
                 /* {
                     @Override
@@ -119,6 +119,7 @@ public class EditNameDialogFragment extends DialogFragment  implements DatePicke
                 /*DatePickerFragment newFragment = new DatePickerFragment();
                 newFragment.setCallBack(ondate);
                 newFragment.show(getFragmentManager(), "datePicker");*/
+                ((SearchActivity) getActivity()).getResult("a", "b", "c");
                 dismiss();
             }
 
@@ -128,16 +129,12 @@ public class EditNameDialogFragment extends DialogFragment  implements DatePicke
                     Log.d("debug", "hai_ondateset");
                     Log.d("debug", Integer.toString(monthOfYear));
                     // here is the place to find the right element
-                    ((SearchActivity) getActivity()).getResult(Integer.toString(year));
+                    ((SearchActivity) getActivity()).getResult("a", "b", "c");
                 }
             };
         });
 
-        btnExample.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+
 
     }
 }

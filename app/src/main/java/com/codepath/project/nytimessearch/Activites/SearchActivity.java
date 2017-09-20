@@ -1,10 +1,13 @@
 package com.codepath.project.nytimessearch.Activites;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -31,6 +34,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
+
+
 
 
 public class SearchActivity extends AppCompatActivity {
@@ -72,7 +77,7 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
-    public void getResult(String searchText) {
+    public void getResult(String searchText, String b, String c) {
         Log.d("debug", "reachedBack");
         Log.d("debug", searchText);
     }
@@ -153,6 +158,36 @@ public class SearchActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+        SearchView searchView = null;
+        if (searchItem != null) {
+            searchView = (SearchView) searchItem.getActionView();
+        }
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        }
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d("debug", "onQuerytextsubmit");
+                // Toast like print
+
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String s) {
+                Log.d("debug", "onQueryTextChange");
+                // UserFeedback.show( "SearchOnQueryTextChanged: " + s);
+                return false;
+            }
+        });
+
+
 
 
         return true;
