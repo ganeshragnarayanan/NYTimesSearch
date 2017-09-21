@@ -2,6 +2,7 @@ package com.codepath.project.nytimessearch.Activites;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -125,17 +126,26 @@ public class SearchActivity extends AppCompatActivity {
         };
         rvResults.addOnScrollListener(scrollListener);
 
-        //articles.clear();
-        /*rvResults.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
-                Article article = articles.get(position);
-                i.putExtra("url", article.getWebUrl());
-                startActivity(i);
+        rvResults.addOnItemTouchListener(
+                new com.codepath.project.nytimessearch.RecyclerItemClickListener(this, rvResults, new com.codepath.project.nytimessearch.RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Log.d("debug", "onclick");
+                        // do whatever
+                        Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
+                        Article article = articles.get(position);
+                        i.putExtra("url", article.getWebUrl());
+                        startActivity(i);
+                    }
 
-            }
-        });*/
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
+
+
     }
 
     // Append the next page of data into the adapter
