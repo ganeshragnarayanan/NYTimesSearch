@@ -48,6 +48,10 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<Contact> contacts;
     private EndlessRecyclerViewScrollListener scrollListener;
 
+    String searchDate1 = "";
+    String searchOrder1 = "";
+    String searchCategory1 = "";
+
     // https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20160112&sort=oldest&fq=news_desk:("Arts" "Sports" "Fashion" "Style")&api-key=227c750bb7714fc39ef1559ef1bd8329
     //https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20160112&sort=oldest&fq=news_desk:("Arts" "Sports" "Fashion" "Style")&page=2&api-key=227c750bb7714fc39ef1559ef1bd8329
 
@@ -80,9 +84,14 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
-    public void getResult(String searchText, String b, String c) {
+    public void getResult(String searchDate, String searchOrder, String searchCategory) {
         Log.d("debug", "reachedBack");
-        Log.d("debug", searchText);
+        Log.d("debug", searchDate);
+        Log.d("debug", searchOrder);
+        Log.d("debug", searchCategory);
+        searchDate1 = searchDate;
+        searchOrder1 = searchOrder;
+        searchCategory1 = searchCategory;
     }
 
     private void showEditDialog() {
@@ -266,8 +275,8 @@ public class SearchActivity extends AppCompatActivity {
         params.put("api-key", "c232ab9374584104b91cc354d49784d4");
         params.put("page", 0);
         params.put("q", query);
-
-
+        Log.d("debug", searchDate1);
+        Log.d("debug", searchOrder1);
 
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
