@@ -14,8 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.codepath.project.nytimessearch.Activites.SearchActivity;
 
@@ -64,8 +66,15 @@ public class EditNameDialogFragment extends DialogFragment  implements DatePicke
 
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mEditText = (EditText) view.findViewById(R.id.etDate);
+        final EditText etDate = (EditText) view.findViewById(R.id.etDate);
+        final EditText filterDate = (EditText) view.findViewById(R.id.etDate);
+        final Spinner filterOldest = (Spinner) view.findViewById(R.id.spinValues);
+        final CheckBox filterArts = (CheckBox) view.findViewById(R.id.cbValues1);
+        final CheckBox filterFashion = (CheckBox) view.findViewById(R.id.cbValues2);
+        final CheckBox filterSports = (CheckBox) view.findViewById(R.id.cbValues3);
+
         String title = getArguments().getString("title", "Enter Name");
+
 
         getDialog().setTitle("Test");
        // mEditText.requestFocus();
@@ -74,8 +83,6 @@ public class EditNameDialogFragment extends DialogFragment  implements DatePicke
 
         Button btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
         Button btnDate = (Button) view.findViewById(R.id.btnDate);
-
-        final EditText etDate = (EditText) view.findViewById(R.id.etDate);
 
         btnSubmit.requestFocus();
 
@@ -90,11 +97,12 @@ public class EditNameDialogFragment extends DialogFragment  implements DatePicke
             DatePickerDialog.OnDateSetListener ondate = new  DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    Log.d("debug", "hai_ondateset");
-                    Log.d("debug", Integer.toString(monthOfYear));
-                    // here is the place to find the right element
-                    ((SearchActivity) getActivity()).getResult("a", "b", "c");
-                    etDate.setText("got date");
+                    // called after you selected the date and pressed ok
+                    String yearValue = Integer.toString(year);
+                    String monthValue = Integer.toString(monthOfYear);
+                    String dayValue = Integer.toString(dayOfMonth);
+
+                    etDate.setText(yearValue+monthValue+dayValue);
                 }
             };
         });
@@ -103,23 +111,28 @@ public class EditNameDialogFragment extends DialogFragment  implements DatePicke
             @Override
             public void onClick(View v) {
                 Log.d("debug", "ondiaglogclick");
-                String searchText = etDate.getText().toString();
-                ((SearchActivity) getActivity()).getResult("a", "b", "c");
-                //DialogFragment newFragment = new com.cfsuman.me.androidcodesnippets.DatePickerFragment();
-                /* {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int day) {
-                        salePaymentCustomView.setBtDateText("" + day + "/" + month+1 + "/" + year);
-                    }
-                };
-                newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
-            }*/
 
+                // here is the place to find the right element
 
-                /*DatePickerFragment newFragment = new DatePickerFragment();
-                newFragment.setCallBack(ondate);
-                newFragment.show(getFragmentManager(), "datePicker");*/
-                ((SearchActivity) getActivity()).getResult("a", "b", "c");
+                boolean arts = false, fashion = false, sports = false;
+
+                String date = filterDate.getText().toString();
+
+                if (filterArts.isChecked()) {
+                    arts = true;
+                }
+
+                if (filterFashion.isChecked()) {
+                    fashion = true;
+                }
+
+                if (filterSports.isChecked()) {
+                    sports = true;
+                }
+
+                ((SearchActivity) getActivity()).getResult(date,
+                        filterOldest.getSelectedItem().toString(), arts, fashion, sports);
+
                 dismiss();
             }
 
@@ -129,7 +142,7 @@ public class EditNameDialogFragment extends DialogFragment  implements DatePicke
                     Log.d("debug", "hai_ondateset");
                     Log.d("debug", Integer.toString(monthOfYear));
                     // here is the place to find the right element
-                    ((SearchActivity) getActivity()).getResult("a", "b", "c");
+                    //((SearchActivity) getActivity()).getResult("a", "b", "c");
                 }
             };
         });

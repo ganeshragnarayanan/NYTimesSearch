@@ -51,6 +51,9 @@ public class SearchActivity extends AppCompatActivity {
     String searchDate1 = "";
     String searchOrder1 = "";
     String searchCategory1 = "";
+    boolean searchArts;
+    boolean searchFashion;
+    boolean searchSports;
 
     // https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20160112&sort=oldest&fq=news_desk:("Arts" "Sports" "Fashion" "Style")&api-key=227c750bb7714fc39ef1559ef1bd8329
     //https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20160112&sort=oldest&fq=news_desk:("Arts" "Sports" "Fashion" "Style")&page=2&api-key=227c750bb7714fc39ef1559ef1bd8329
@@ -62,36 +65,15 @@ public class SearchActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-
-        //getSupportActionBar().setCustomView(R.layout.actionbar_title);
-
         setupViews();
-
-
-
-
-//        adapter.notifyDataSetChanged();
-
-
-        /*RecyclerView rvResults = (RecyclerView) findViewById(R.id.rvResults);
-        contacts = Contact.createContactsList(20);
-        adapter = new ArticleArrayAdapter(this, contacts);
-        rvResults.setAdapter(adapter);
-
-        rvResults.setLayoutManager(new LinearLayoutManager(this));*/
-
-
     }
 
-    public void getResult(String searchDate, String searchOrder, String searchCategory) {
-        Log.d("debug", "reachedBack");
-        Log.d("debug", searchDate);
-        Log.d("debug", searchOrder);
-        Log.d("debug", searchCategory);
+    public void getResult(String searchDate, String searchOrder, boolean arts, boolean fashion, boolean sports) {
         searchDate1 = searchDate;
         searchOrder1 = searchOrder;
-        searchCategory1 = searchCategory;
+        searchArts = arts;
+        searchFashion = fashion;
+        searchSports = sports;
     }
 
     private void showEditDialog() {
@@ -112,12 +94,6 @@ public class SearchActivity extends AppCompatActivity {
         Button btnSearch = (Button) findViewById(R.id.btnSearch);
         articles = new ArrayList<>();
         adapter = new ArticleArrayAdapter(this, articles);
-
-        /*
-        JSONArray articlesResults = null;
-        ArrayList<Article> results = Article.fromJsonArray(articlesResults);
-        articles.addAll(results);*/
-
 
         rvResults.setAdapter(adapter);
 
@@ -165,10 +141,6 @@ public class SearchActivity extends AppCompatActivity {
     // Append the next page of data into the adapter
     // This method probably sends out a network request and appends new data items to your adapter.
     public void loadNextDataFromApi(int offset) {
-        Log.d("debug", "loadNextDataFromApi");
-        Log.d("debug", Integer.toString(offset));
-
-        Log.d("debug", "onArticlesSearch");
         String query = etQuery.getText().toString();
         //Toast.makeText(this, "searching for " + query, Toast.LENGTH_LONG).show();
         AsyncHttpClient client = new AsyncHttpClient();
@@ -187,14 +159,11 @@ public class SearchActivity extends AppCompatActivity {
                 JSONArray articlesResults = null;
                 try {
                     articlesResults = response.getJSONObject("response").getJSONArray("docs");
-                    Log.d("debug","got results");
                     //adapter.addAll(Article.fromJsonArray(articlesResults));
                     ArrayList<Article> results = Article.fromJsonArray(articlesResults);
                     articles.addAll(results);
-                    Log.d("debug", "notify adapter");
                     adapter.notifyDataSetChanged();
 
-                    Log.d("debug", articles.toString());
                     //adapter.notifyDataSetChanged();
 
                 } catch (JSONException e) {
@@ -231,14 +200,10 @@ public class SearchActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.d("debug", "onQuerytextsubmit");
-                // Toast like print
-
                 return false;
             }
             @Override
             public boolean onQueryTextChange(String s) {
-                Log.d("debug", "onQueryTextChange");
                 // UserFeedback.show( "SearchOnQueryTextChanged: " + s);
                 return false;
             }
@@ -266,40 +231,44 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void onComposeAction(MenuItem mi) {
-        Log.d("debug", "onmenuclick");
         showEditDialog();
     }
 
     public void onArticlesSearch(View view) {
-        Log.d("debug", "onArticlesSearch");
         String query = etQuery.getText().toString();
         //Toast.makeText(this, "searching for " + query, Toast.LENGTH_LONG).show();
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
 
+        String a = searchDate1;
+        String b = searchOrder1;
+        Boolean c = searchArts;
+        Boolean d = searchFashion;
+        Boolean e = searchSports;
+////https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20160112
+/// &sort=oldest&fq=news_desk:("Arts" "Sports" "Fashion" "Style")&page=2&api-key=227c750bb7714fc39ef1559ef1bd8329
+
+
         RequestParams params = new RequestParams();
         params.put("api-key", "c232ab9374584104b91cc354d49784d4");
         params.put("page", 0);
         params.put("q", query);
-        Log.d("debug", searchDate1);
-        Log.d("debug", searchOrder1);
+        params.put("begin_date", "20130101");
+        params.put("sort", "oldest");
+        params.put("fq", "news_desk:(\"Arts\" \"Sports\" \"Fashion\" \"Style\")");
 
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 //super.onSuccess(statusCode, headers, response);
-                Log.d("debug", "on success");
                 JSONArray articlesResults = null;
                 try {
                     articlesResults = response.getJSONObject("response").getJSONArray("docs");
-                    Log.d("debug","got results");
                     //adapter.addAll(Article.fromJsonArray(articlesResults));
                     ArrayList<Article> results = Article.fromJsonArray(articlesResults);
                     articles.addAll(results);
-                    Log.d("debug", "notify adapter");
                     adapter.notifyDataSetChanged();
 
-                    Log.d("debug", articles.toString());
                     //adapter.notifyDataSetChanged();
 
                 } catch (JSONException e) {

@@ -2,7 +2,6 @@ package com.codepath.project.nytimessearch;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,6 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.d("debug", "onCreateViewHolder");
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_article_results, parent, false);
         return new ViewHolder(view);
 
@@ -40,7 +38,6 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Log.d("debug", "onBindViewHolder");
         Article contact = mContacts.get(position);
         //Contact contact = mContacts.get(position);
         holder.bind(contact);
@@ -49,7 +46,6 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
     @Override
     public int getItemCount() {
         int size = mContacts.size();
-        Log.d("debug", Integer.toString(size));
         return mContacts.size();
     }
 
@@ -68,8 +64,6 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
 
             super(itemView);
 
-            Log.d("debug", "ViewHolder");
-
             ImageView imageView = itemView.findViewById(R.id.ivImage);
             imageView.setImageResource(0);
             TextView tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
@@ -80,7 +74,6 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
         // Involves populating data into the item through holder
         //public void bind(final Article contact) {
         public void bind(final Article contact) {
-            Log.d("debug", "bind");
             //tvName.setText(contact.getHeadline());
             TextView tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
             tvTitle.setText(contact.getHeadline());
