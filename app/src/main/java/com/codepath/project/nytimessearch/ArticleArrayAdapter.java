@@ -87,6 +87,13 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
                 Picasso.with(mContext).load(thumbnail).into(imageView);
             }
 
+            /*if (!thumbnail.isEmpty()) {
+                Picasso.with(mContext)
+                        .load(thumbnail)
+                        .centerCrop() // or centerInside()
+                        .into(imageView);
+            }*/
+
 
            /* btnOnline.setText("hai");
             btnOnline.setOnClickListener(new View.OnClickListener() {

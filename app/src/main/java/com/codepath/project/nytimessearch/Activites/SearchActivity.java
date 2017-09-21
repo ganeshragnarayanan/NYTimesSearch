@@ -37,8 +37,6 @@ import java.util.ArrayList;
 import cz.msebera.android.httpclient.Header;
 
 
-
-
 public class SearchActivity extends AppCompatActivity {
 
     TextView etQuery;
@@ -210,6 +208,7 @@ public class SearchActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                onArticlesSearch(null, query);
                 return false;
             }
             @Override
@@ -218,10 +217,6 @@ public class SearchActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-
-
-
         return true;
     }
 
@@ -244,8 +239,8 @@ public class SearchActivity extends AppCompatActivity {
         showEditDialog();
     }
 
-    public void onArticlesSearch(View view) {
-        String query = etQuery.getText().toString();
+    public void onArticlesSearch(View view, String query) {
+        //String query = etQuery.getText().toString();
         //Toast.makeText(this, "searching for " + query, Toast.LENGTH_LONG).show();
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
@@ -258,14 +253,17 @@ public class SearchActivity extends AppCompatActivity {
 ////https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20160112
 /// &sort=oldest&fq=news_desk:("Arts" "Sports" "Fashion" "Style")&page=2&api-key=227c750bb7714fc39ef1559ef1bd8329
 
+        articles.clear();
+        adapter.notifyDataSetChanged();
+        scrollListener.resetState();
 
         RequestParams params = new RequestParams();
         params.put("api-key", "c232ab9374584104b91cc354d49784d4");
         params.put("page", 0);
         params.put("q", query);
-        params.put("begin_date", "20130101");
-        params.put("sort", "oldest");
-        params.put("fq", "news_desk:(\"Arts\" \"Sports\" \"Fashion\" \"Style\")");
+        //params.put("begin_date", "20130101");
+        //params.put("sort", "oldest");
+        //params.put("fq", "news_desk:(\"Arts\" \"Sports\" \"Fashion\" \"Style\")");
 
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
