@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 /**
@@ -82,6 +84,16 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
             //tvName.setText(contact.getHeadline());
             TextView tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
             tvTitle.setText(contact.getHeadline());
+
+            ImageView imageView = itemView.findViewById(R.id.ivImage);
+            imageView.setImageResource(0);
+
+
+            String thumbnail = contact.getThumbNail();
+            if (!thumbnail.isEmpty()) {
+                Picasso.with(mContext).load(thumbnail).into(imageView);
+            }
+
 
            /* btnOnline.setText("hai");
             btnOnline.setOnClickListener(new View.OnClickListener() {

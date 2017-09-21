@@ -5,7 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -121,9 +121,14 @@ public class SearchActivity extends AppCompatActivity {
 
         rvResults.setAdapter(adapter);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        rvResults.setLayoutManager(linearLayoutManager);
-        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+        //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        //rvResults.setLayoutManager(linearLayoutManager);
+
+        GridLayoutManager gridLayoutManger = new GridLayoutManager(this, 2);
+        rvResults.setLayoutManager(gridLayoutManger);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManger) {
+        //scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 Log.d("debug", "onLoadMore");
@@ -171,7 +176,7 @@ public class SearchActivity extends AppCompatActivity {
 
         RequestParams params = new RequestParams();
         params.put("api-key", "c232ab9374584104b91cc354d49784d4");
-        params.put("page", 0);
+        params.put("page", offset);
         params.put("q", query);
 
         client.get(url, params, new JsonHttpResponseHandler() {
@@ -193,6 +198,7 @@ public class SearchActivity extends AppCompatActivity {
                     //adapter.notifyDataSetChanged();
 
                 } catch (JSONException e) {
+                    Log.d("debug", "got exception $$$$$$$$$$$$$$$$$$$$$$$$$");
                     e.printStackTrace();
                 }
             }
