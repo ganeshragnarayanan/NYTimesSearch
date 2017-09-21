@@ -48,6 +48,9 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<Contact> contacts;
     private EndlessRecyclerViewScrollListener scrollListener;
 
+    // https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20160112&sort=oldest&fq=news_desk:("Arts" "Sports" "Fashion" "Style")&api-key=227c750bb7714fc39ef1559ef1bd8329
+    //https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20160112&sort=oldest&fq=news_desk:("Arts" "Sports" "Fashion" "Style")&page=2&api-key=227c750bb7714fc39ef1559ef1bd8329
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,9 +117,10 @@ public class SearchActivity extends AppCompatActivity {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Log.d("debug", "onLoadMore");
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
-                //loadNextDataFromApi(page);
+                loadNextDataFromApi(page);
                 /*ArrayList<Article> moreContacts = Article.fromJsonArray(10, page);
                 int curSize = adapter.getItemCount();
                 allContacts.addAll(moreContacts);
@@ -147,6 +151,44 @@ public class SearchActivity extends AppCompatActivity {
     // Append the next page of data into the adapter
     // This method probably sends out a network request and appends new data items to your adapter.
     public void loadNextDataFromApi(int offset) {
+        Log.d("debug", "loadNextDataFromApi");
+        Log.d("debug", Integer.toString(offset));
+
+        Log.d("debug", "onArticlesSearch");
+        String query = etQuery.getText().toString();
+        //Toast.makeText(this, "searching for " + query, Toast.LENGTH_LONG).show();
+        AsyncHttpClient client = new AsyncHttpClient();
+        String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
+
+        RequestParams params = new RequestParams();
+        params.put("api-key", "c232ab9374584104b91cc354d49784d4");
+        params.put("page", 0);
+        params.put("q", query);
+
+        client.get(url, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                //super.onSuccess(statusCode, headers, response);
+                Log.d("debug", "on success");
+                JSONArray articlesResults = null;
+                try {
+                    articlesResults = response.getJSONObject("response").getJSONArray("docs");
+                    Log.d("debug","got results");
+                    //adapter.addAll(Article.fromJsonArray(articlesResults));
+                    ArrayList<Article> results = Article.fromJsonArray(articlesResults);
+                    articles.addAll(results);
+                    Log.d("debug", "notify adapter");
+                    adapter.notifyDataSetChanged();
+
+                    Log.d("debug", articles.toString());
+                    //adapter.notifyDataSetChanged();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
         // Send an API request to retrieve appropriate paginated data
         //  --> Send the request including an offset value (i.e `page`) as a query parameter.
         //  --> Deserialize and construct new model objects from the API response

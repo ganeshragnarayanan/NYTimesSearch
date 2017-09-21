@@ -53,6 +53,8 @@ public class Article {
     public static ArrayList<Article> fromJsonArray(JSONArray array) {
         ArrayList<Article> results = new ArrayList<>();
 
+        Log.d("debug", "Jsonarraycount");
+        Log.d("debug", Integer.toString(array.length()));
         for (int x=0;x<array.length();x++) {
             try {
                 results.add(new Article(array.getJSONObject(x)));
