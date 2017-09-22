@@ -15,13 +15,17 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
-        android:text="Begin Date" />
+        android:text="Begin Date"
+        android:textColor="@android:color/holo_blue_bright" />
 
     <EditText
         android:id="@+id/etDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvDate"
+        android:clickable="true"
+        android:inputType="date"
+        android:focusable="false"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -32,26 +36,39 @@
         android:text="Sort Order"
         android:layout_below="@+id/etDate"
         android:layout_alignLeft="@+id/tvDate"
-        android:layout_alignStart="@+id/tvDate" />
+        android:layout_alignStart="@+id/tvDate"
+        android:textColor="@android:color/holo_blue_bright"/>
 
     <Spinner
         android:id="@+id/spinValues"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:entries="@array/spinnerItems"
         android:layout_below="@+id/tvSortOrder"
-        android:layout_centerHorizontal="true"
-        android:entries="@array/spinnerItems"/>
+        android:layout_alignLeft="@+id/cbValues1"
+        android:layout_alignStart="@+id/cbValues1"
+        android:layout_marginTop="14dp" />
 
+    <TextView
+        android:id="@+id/tvNewsDesk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:text="News Desk Values"
+        android:layout_below="@+id/spinValues"
+        android:layout_alignLeft="@+id/spinValues"
+        android:layout_alignStart="@+id/spinValues"
+        android:textColor="@android:color/holo_blue_bright"/>
 
     <CheckBox
         android:id="@+id/cbValues1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Arts"
-        android:layout_below="@+id/spinValues"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/tvNewsDesk"
         android:layout_alignRight="@+id/etDate"
-        android:layout_alignEnd="@+id/etDate"
-        android:layout_marginTop="22dp" />
+        android:layout_alignEnd="@+id/etDate" />
 
     <CheckBox
         android:id="@+id/cbValues2"
@@ -81,12 +98,4 @@
         android:layout_alignLeft="@+id/tvSortOrder"
         android:layout_alignStart="@+id/tvSortOrder" />
 
-    <Button
-        android:id="@+id/btnDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/etDate"
-        android:layout_toEndOf="@+id/tvSortOrder"
-        android:layout_toRightOf="@+id/tvSortOrder"
-        android:text="DATE" />
 </RelativeLayout>

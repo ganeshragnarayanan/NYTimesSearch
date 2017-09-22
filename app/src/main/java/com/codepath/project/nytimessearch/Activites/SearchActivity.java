@@ -254,6 +254,10 @@ public class SearchActivity extends AppCompatActivity {
         Boolean c = searchArts;
         Boolean d = searchFashion;
         Boolean e = searchSports;
+
+        String newsDesk = "news_desk:(";
+        String newsCategories = "";
+
 ////https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20160112
 /// &sort=oldest&fq=news_desk:("Arts" "Sports" "Fashion" "Style")&page=2&api-key=227c750bb7714fc39ef1559ef1bd8329
 
@@ -266,13 +270,35 @@ public class SearchActivity extends AppCompatActivity {
         params.put("page", 0);
         params.put("q", query);
         if (!searchDate1.isEmpty()) {
-            params.put("begin_date", "2012424");
+            params.put("begin_date", searchDate1);
         }
-        
+
         if (!searchOrder1.isEmpty()) {
             params.put("sort", searchOrder1);
         }
 
+        Log.d("debug", "sort_order:");
+        Log.d("debug", searchOrder1);
+
+
+        if (searchArts) {
+            newsCategories+="\"Arts\"";
+        }
+
+        if (searchSports) {
+            newsCategories+=" \"Sports\"";
+        }
+
+        if (searchFashion) {
+            newsCategories+=" \"Fashion\"";
+        }
+
+
+
+
+        if (searchArts || searchFashion || searchSports) {
+            params.put("fq", newsDesk + newsCategories + ")");
+        }
         //params.put("fq", "news_desk:(\"Arts\" \"Sports\" \"Fashion\" \"Style\")");
 
         /*String searchDate1 = "";

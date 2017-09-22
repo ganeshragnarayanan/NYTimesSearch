@@ -82,13 +82,13 @@ public class EditNameDialogFragment extends DialogFragment  implements DatePicke
         //mEditText.setOnEditorActionListener(this);
 
         Button btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
-        Button btnDate = (Button) view.findViewById(R.id.btnDate);
-
         btnSubmit.requestFocus();
 
-        btnDate.setOnClickListener(new View.OnClickListener() {
+        etDate.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+                Log.d("debug", "ondateclick");
                 Log.d("debug", "on date click");
                 DatePickerFragment newFragment = new DatePickerFragment();
                 newFragment.setCallBack(ondate);
@@ -99,8 +99,20 @@ public class EditNameDialogFragment extends DialogFragment  implements DatePicke
                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                     // called after you selected the date and pressed ok
                     String yearValue = Integer.toString(year);
-                    String monthValue = Integer.toString(monthOfYear);
-                    String dayValue = Integer.toString(dayOfMonth);
+                    String monthValue;
+                    String dayValue;
+
+                    if (monthOfYear < 10) {
+                        monthValue = "0" + Integer.toString(monthOfYear);
+                    } else {
+                        monthValue = Integer.toString(monthOfYear);
+                    }
+
+                    if (dayOfMonth < 10) {
+                        dayValue = "0" + Integer.toString(dayOfMonth);
+                    } else {
+                        dayValue =  Integer.toString(dayOfMonth);
+                    }
 
                     etDate.setText(yearValue+monthValue+dayValue);
                 }
