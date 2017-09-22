@@ -47,12 +47,15 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<Contact> contacts;
     private EndlessRecyclerViewScrollListener scrollListener;
 
+    // filters
     String searchDate1 = "";
     String searchOrder1 = "";
     String searchCategory1 = "";
     boolean searchArts;
     boolean searchFashion;
     boolean searchSports;
+
+    String searchQuery;
 
     // https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20160112&sort=oldest&fq=news_desk:("Arts" "Sports" "Fashion" "Style")&api-key=227c750bb7714fc39ef1559ef1bd8329
     //https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20160112&sort=oldest&fq=news_desk:("Arts" "Sports" "Fashion" "Style")&page=2&api-key=227c750bb7714fc39ef1559ef1bd8329
@@ -85,12 +88,12 @@ public class SearchActivity extends AppCompatActivity {
 
     public void setupViews() {
 
-        etQuery = (TextView) findViewById(R.id.tvText);
+        //etQuery = (TextView) findViewById(R.id.tvText);
         //GridView gvResults = (GridView) findViewById(R.id.gvResults);
         RecyclerView rvResults = (RecyclerView) findViewById(R.id.rvResults);
 
 
-        Button btnSearch = (Button) findViewById(R.id.btnSearch);
+        //Button btnSearch = (Button) findViewById(R.id.btnSearch);
         articles = new ArrayList<>();
         adapter = new ArticleArrayAdapter(this, articles);
 
@@ -149,7 +152,7 @@ public class SearchActivity extends AppCompatActivity {
     // Append the next page of data into the adapter
     // This method probably sends out a network request and appends new data items to your adapter.
     public void loadNextDataFromApi(int offset) {
-        String query = etQuery.getText().toString();
+        //String query = etQuery.getText().toString();
         //Toast.makeText(this, "searching for " + query, Toast.LENGTH_LONG).show();
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
@@ -157,7 +160,7 @@ public class SearchActivity extends AppCompatActivity {
         RequestParams params = new RequestParams();
         params.put("api-key", "c232ab9374584104b91cc354d49784d4");
         params.put("page", offset);
-        params.put("q", query);
+        params.put("q", searchQuery);
 
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
@@ -208,6 +211,7 @@ public class SearchActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                searchQuery = query;
                 onArticlesSearch(null, query);
                 return false;
             }
@@ -261,9 +265,23 @@ public class SearchActivity extends AppCompatActivity {
         params.put("api-key", "c232ab9374584104b91cc354d49784d4");
         params.put("page", 0);
         params.put("q", query);
-        //params.put("begin_date", "20130101");
-        //params.put("sort", "oldest");
+        if (!searchDate1.isEmpty()) {
+            params.put("begin_date", "2012424");
+        }
+        
+        if (!searchOrder1.isEmpty()) {
+            params.put("sort", searchOrder1);
+        }
+
         //params.put("fq", "news_desk:(\"Arts\" \"Sports\" \"Fashion\" \"Style\")");
+
+        /*String searchDate1 = "";
+        String searchOrder1 = "";
+        String searchCategory1 = "";
+        boolean searchArts;
+        boolean searchFashion;
+        boolean searchSports;*/
+
 
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override

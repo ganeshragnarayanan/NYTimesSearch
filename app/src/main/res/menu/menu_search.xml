@@ -5,7 +5,7 @@
 
         <item
             android:id="@+id/miProfile"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/filter"
             android:onClick="onComposeAction"
             app:showAsAction="ifRoom|withText"
             android:title="Profile">
