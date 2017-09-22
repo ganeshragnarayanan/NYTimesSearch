@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -84,8 +84,15 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
 
             String thumbnail = contact.getThumbNail();
             if (!thumbnail.isEmpty()) {
-                Picasso.with(mContext).load(thumbnail).into(imageView);
+                //Picasso.with(mContext).load(thumbnail).into(imageView);
+
+                Glide.with(mContext)
+                        .load(thumbnail)
+                        .placeholder(R.drawable.ic_nocover)
+                        .into(imageView);
             }
+
+
 
             /*if (!thumbnail.isEmpty()) {
                 Picasso.with(mContext)

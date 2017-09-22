@@ -3,12 +3,15 @@ package com.codepath.project.nytimessearch.Activites;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -17,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codepath.project.nytimessearch.Article;
 import com.codepath.project.nytimessearch.ArticleArrayAdapter;
@@ -24,6 +28,7 @@ import com.codepath.project.nytimessearch.Contact;
 import com.codepath.project.nytimessearch.EditNameDialogFragment;
 import com.codepath.project.nytimessearch.EndlessRecyclerViewScrollListener;
 import com.codepath.project.nytimessearch.R;
+import com.codepath.project.nytimessearch.SpacesItemDecoration;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -32,6 +37,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
@@ -102,8 +108,17 @@ public class SearchActivity extends AppCompatActivity {
         //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         //rvResults.setLayoutManager(linearLayoutManager);
 
-        GridLayoutManager gridLayoutManger = new GridLayoutManager(this, 2);
+        //GridLayoutManager gridLayoutManger = new GridLayoutManager(this, 2);
+        //rvResults.setLayoutManager(gridLayoutManger);
+        StaggeredGridLayoutManager gridLayoutManger = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         rvResults.setLayoutManager(gridLayoutManger);
+
+        RecyclerView.ItemDecoration itemDecoration = new
+                DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        rvResults.addItemDecoration(itemDecoration);
+
+        SpacesItemDecoration decoration = new SpacesItemDecoration(16);
+        rvResults.addItemDecoration(decoration);
 
         scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManger) {
         //scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
@@ -282,18 +297,16 @@ public class SearchActivity extends AppCompatActivity {
 
 
         if (searchArts) {
-            newsCategories+="\"Arts\"";
+            newsCategories += "\"Arts\"";
         }
 
         if (searchSports) {
-            newsCategories+=" \"Sports\"";
+            newsCategories += " \"Sports\"";
         }
 
         if (searchFashion) {
-            newsCategories+=" \"Fashion\"";
+            newsCategories += " \"Fashion\"";
         }
-
-
 
 
         if (searchArts || searchFashion || searchSports) {
@@ -328,7 +341,50 @@ public class SearchActivity extends AppCompatActivity {
                 }
             }
 
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Context context = getApplicationContext();
+                CharSequence text = "No Internet Connection!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
+                Context context = getApplicationContext();
+                CharSequence text = "No Internet Connection!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
         });
+
+
+
+    }
+
+
+
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
+    public boolean isOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        } catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+        return false;
     }
 
 
