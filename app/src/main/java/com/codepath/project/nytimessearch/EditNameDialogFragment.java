@@ -102,6 +102,7 @@ public class EditNameDialogFragment extends DialogFragment  implements DatePicke
                     String monthValue;
                     String dayValue;
 
+                    monthOfYear++;
                     if (monthOfYear < 10) {
                         monthValue = "0" + Integer.toString(monthOfYear);
                     } else {

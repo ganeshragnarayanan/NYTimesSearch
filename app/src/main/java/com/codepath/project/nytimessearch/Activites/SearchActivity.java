@@ -42,6 +42,7 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
+//https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20160112&sort=oldest&fq=news_desk:(%22Education%22%20%22Health%22)&api-key=227c750bb7714fc39ef1559ef1bd8329
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -167,8 +168,8 @@ public class SearchActivity extends AppCompatActivity {
     // Append the next page of data into the adapter
     // This method probably sends out a network request and appends new data items to your adapter.
     public void loadNextDataFromApi(int offset) {
-        //String query = etQuery.getText().toString();
-        //Toast.makeText(this, "searching for " + query, Toast.LENGTH_LONG).show();
+        //fetchArticles(searchQuery, offset);
+
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
 
@@ -198,12 +199,18 @@ public class SearchActivity extends AppCompatActivity {
                 }
             }
 
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
+                Context context = getApplicationContext();
+                CharSequence text = "No Internet Connection 2" +
+                        "!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+
         });
-        // Send an API request to retrieve appropriate paginated data
-        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
-        //  --> Deserialize and construct new model objects from the API response
-        //  --> Append the new data objects to the existing set of items inside the array of items
-        //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
     }
 
     @Override
@@ -241,16 +248,7 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
-            return true;
-        }*/
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -259,8 +257,11 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void onArticlesSearch(View view, String query) {
-        //String query = etQuery.getText().toString();
-        //Toast.makeText(this, "searching for " + query, Toast.LENGTH_LONG).show();
+        fetchArticles(query, 0);
+    }
+
+    public void fetchArticles(String query, int page) {
+
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
 
@@ -282,7 +283,7 @@ public class SearchActivity extends AppCompatActivity {
 
         RequestParams params = new RequestParams();
         params.put("api-key", "c232ab9374584104b91cc354d49784d4");
-        params.put("page", 0);
+        params.put("page", page);
         params.put("q", query);
         if (!searchDate1.isEmpty()) {
             params.put("begin_date", searchDate1);
@@ -308,34 +309,23 @@ public class SearchActivity extends AppCompatActivity {
             newsCategories += " \"Fashion\"";
         }
 
-
         if (searchArts || searchFashion || searchSports) {
             params.put("fq", newsDesk + newsCategories + ")");
         }
         //params.put("fq", "news_desk:(\"Arts\" \"Sports\" \"Fashion\" \"Style\")");
 
-        /*String searchDate1 = "";
-        String searchOrder1 = "";
-        String searchCategory1 = "";
-        boolean searchArts;
-        boolean searchFashion;
-        boolean searchSports;*/
-
+        Log.d("debug", "Query Parameters");
+        Log.d("debug", params.toString());
 
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                //super.onSuccess(statusCode, headers, response);
                 JSONArray articlesResults = null;
                 try {
                     articlesResults = response.getJSONObject("response").getJSONArray("docs");
-                    //adapter.addAll(Article.fromJsonArray(articlesResults));
                     ArrayList<Article> results = Article.fromJsonArray(articlesResults);
                     articles.addAll(results);
                     adapter.notifyDataSetChanged();
-
-                    //adapter.notifyDataSetChanged();
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -344,7 +334,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 Context context = getApplicationContext();
-                CharSequence text = "No Internet Connection!";
+                CharSequence text = "No Internet Connection 1!";
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);
@@ -355,18 +345,15 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
                 Context context = getApplicationContext();
-                CharSequence text = "No Internet Connection!";
+                CharSequence text = "No Internet Connection 2" +
+                        "!";
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
             }
         });
-
-
-
     }
-
 
 
     private Boolean isNetworkAvailable() {
