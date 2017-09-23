@@ -2,11 +2,13 @@ package com.codepath.project.nytimessearch.Activites;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
@@ -159,10 +161,19 @@ public class SearchActivity extends AppCompatActivity {
                     public void onItemClick(View view, int position) {
                         Log.d("debug", "onclick");
                         // do whatever
-                        Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
+                        // chrome (start)
+                        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                        builder.setToolbarColor(ContextCompat.getColor(view.getContext(), R.color.colorAccent));
+                        builder.addDefaultShareMenuItem();
+                        CustomTabsIntent customTabsIntent = builder.build();
+                        Article article = articles.get(position);
+                        customTabsIntent.launchUrl(view.getContext(), Uri.parse(article.getWebUrl()));
+                        // chrome (end)
+
+                        /*Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
                         Article article = articles.get(position);
                         i.putExtra("url", article.getWebUrl());
-                        startActivity(i);
+                        startActivity(i);*/
                     }
 
                     @Override
