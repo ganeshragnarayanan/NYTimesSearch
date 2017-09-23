@@ -29,11 +29,26 @@ public class Article {
     String headline;
     String thumbNail;
 
+    public String getSnippet() {
+        return snippet;
+    }
+
+    public String getNewdesk() {
+        return newdesk;
+    }
+
+    String snippet;
+    String newdesk;
+
     public Article(JSONObject jsonObject) {
         try {
             this.webUrl = jsonObject.getString("web_url");
             this.headline = jsonObject.getJSONObject("headline").getString("main");
+            this.snippet = jsonObject.getString("snippet");
+
             JSONArray multimedia = jsonObject.getJSONArray("multimedia");
+            JSONArray newDeskObj = jsonObject.getJSONArray("keywords");
+            //newDeskObj.getString()
 
             if (multimedia.length() > 0) {
                 JSONObject multimediaJson = multimedia.getJSONObject(0);
@@ -43,6 +58,13 @@ public class Article {
                 this.thumbNail = "";
 
             }
+
+            /*if (newDeskObj.length() > 0) {
+                this.newdesk =  newDeskObj.get.getJ("new_desk");
+
+            }*/
+
+
         } catch (JSONException e){
 
         }
