@@ -88,7 +88,17 @@ public class SearchActivity extends AppCompatActivity {
     private void showEditDialog() {
 
         FragmentManager fm = getSupportFragmentManager();
-        EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance("Some Title");
+        EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance("Filters");
+
+
+        Bundle args = new Bundle();
+        args.putString("date", searchDate1);
+        args.putString("sort", searchOrder1);
+        args.putBoolean("arts", searchArts);
+        args.putBoolean("fashion", searchFashion);
+        args.putBoolean("sports", searchSports);
+
+        editNameDialogFragment.setArguments(args);
         editNameDialogFragment.show(fm, "fragment_edit_name");
 
     }
