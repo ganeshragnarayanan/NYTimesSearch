@@ -2,8 +2,6 @@ package com.codepath.project.nytimessearch.Activites;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
@@ -39,12 +37,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
-
-//https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20160112&sort=oldest&fq=news_desk:(%22Education%22%20%22Health%22)&api-key=227c750bb7714fc39ef1559ef1bd8329
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -54,6 +49,7 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<Article> articles;
     ArticleArrayAdapter adapter;
     private EndlessRecyclerViewScrollListener scrollListener;
+    private static final String API_KEY = "c232ab9374584104b91cc354d49784d4";
 
     // filters
     String searchDate1 = "";
@@ -65,9 +61,6 @@ public class SearchActivity extends AppCompatActivity {
 
     String searchQuery;
 
-    // https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20160112&sort=oldest&fq=news_desk:("Arts" "Sports" "Fashion" "Style")&api-key=227c750bb7714fc39ef1559ef1bd8329
-    //https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20160112&sort=oldest&fq=news_desk:("Arts" "Sports" "Fashion" "Style")&page=2&api-key=227c750bb7714fc39ef1559ef1bd8329
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +71,7 @@ public class SearchActivity extends AppCompatActivity {
         setupViews();
     }
 
+    /* callback for the filters dialog */
     public void getResult(String searchDate, String searchOrder, boolean arts, boolean fashion, boolean sports) {
         searchDate1 = searchDate;
         searchOrder1 = searchOrder;
@@ -86,11 +80,11 @@ public class SearchActivity extends AppCompatActivity {
         searchSports = sports;
     }
 
+    /* invoke the filters dialog */
     private void showEditDialog() {
 
         FragmentManager fm = getSupportFragmentManager();
         EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance("Filters");
-
 
         Bundle args = new Bundle();
         args.putString("date", searchDate1);
@@ -106,22 +100,13 @@ public class SearchActivity extends AppCompatActivity {
 
     public void setupViews() {
 
-        //etQuery = (TextView) findViewById(R.id.tvText);
-        //GridView gvResults = (GridView) findViewById(R.id.gvResults);
         RecyclerView rvResults = (RecyclerView) findViewById(R.id.rvResults);
 
-
-        //Button btnSearch = (Button) findViewById(R.id.btnSearch);
         articles = new ArrayList<>();
         adapter = new ArticleArrayAdapter(this, articles);
 
         rvResults.setAdapter(adapter);
 
-        //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        //rvResults.setLayoutManager(linearLayoutManager);
-
-        //GridLayoutManager gridLayoutManger = new GridLayoutManager(this, 2);
-        //rvResults.setLayoutManager(gridLayoutManger);
         StaggeredGridLayoutManager gridLayoutManger = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         rvResults.setLayoutManager(gridLayoutManger);
 
@@ -133,23 +118,10 @@ public class SearchActivity extends AppCompatActivity {
         rvResults.addItemDecoration(decoration);
 
         scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManger) {
-        //scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 Log.d("debug", "onLoadMore");
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
                 loadNextDataFromApi(page);
-                /*ArrayList<Article> moreContacts = Article.fromJsonArray(10, page);
-                int curSize = adapter.getItemCount();
-                allContacts.addAll(moreContacts);
-
-                view.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.notifyItemRangeInserted(curSize, allContacts.size() - 1);
-                    }
-                });*/
             }
         };
         rvResults.addOnScrollListener(scrollListener);
@@ -158,40 +130,29 @@ public class SearchActivity extends AppCompatActivity {
                 new RecyclerItemClickListener(this, rvResults, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Log.d("debug", "onclick");
-                        // do whatever
-                        // chrome (start)
+                        Article article = articles.get(position);
+
                         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                         builder.setToolbarColor(ContextCompat.getColor(view.getContext(), R.color.colorAccent));
                         builder.addDefaultShareMenuItem();
                         CustomTabsIntent customTabsIntent = builder.build();
-                        Article article = articles.get(position);
-                        customTabsIntent.launchUrl(view.getContext(), Uri.parse(article.getWebUrl()));
-                        // chrome (end)
 
-                        /*Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
-                        Article article = articles.get(position);
-                        i.putExtra("url", article.getWebUrl());
-                        startActivity(i);*/
+                        customTabsIntent.launchUrl(view.getContext(), Uri.parse(article.getWebUrl()));
+
                     }
 
                     @Override
                     public void onLongItemClick(View view, int position) {
-                        // do whatever
+
                     }
                 })
         );
-
-
     }
 
     // Append the next page of data into the adapter
     // This method probably sends out a network request and appends new data items to your adapter.
     public void loadNextDataFromApi(int offset) {
-        //fetchArticles(searchQuery, offset);
-
         fetchArticlesFromWeb(searchQuery, offset);
-
     }
 
     @Override
@@ -220,7 +181,6 @@ public class SearchActivity extends AppCompatActivity {
             }
             @Override
             public boolean onQueryTextChange(String s) {
-                // UserFeedback.show( "SearchOnQueryTextChanged: " + s);
                 return false;
             }
         });
@@ -246,20 +206,12 @@ public class SearchActivity extends AppCompatActivity {
         fetchArticlesFromWeb(query, 0);
     }
 
-    public void fetchArticles(String query, int page) {
-
-
-
-    }
-
-
     public void fetchArticlesFromWeb(String query, int page) {
-        String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
-
         String newsDesk = "news_desk:(";
         String newsCategories = "";
+        client = new ArticleClient(this);
 
-        if (isNetworkAvailable() == false || isOnline() == false) {
+        if (client.isNetworkAvailable() == false || client.isOnline() == false) {
             CharSequence text = "Check your internet connection";
             int duration = Toast.LENGTH_SHORT;
 
@@ -267,8 +219,9 @@ public class SearchActivity extends AppCompatActivity {
             toast.show();
         }
 
+        /* construct parameters */
         RequestParams params = new RequestParams();
-        params.put("api-key", "c232ab9374584104b91cc354d49784d4");
+        params.put("api-key", API_KEY);
         params.put("page", page);
         params.put("q", query);
         if (!searchDate1.isEmpty()) {
@@ -295,9 +248,8 @@ public class SearchActivity extends AppCompatActivity {
             params.put("fq", newsDesk + newsCategories + ")");
         }
 
-
-        client = new ArticleClient();
-        client.getArticles(url, params, new JsonHttpResponseHandler() {
+        client = new ArticleClient(this);
+        client.getArticles(params, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -315,7 +267,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 Context context = getApplicationContext();
-                CharSequence text = "No Internet Connection 1!";
+                CharSequence text = "Error loading page";
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);
@@ -326,7 +278,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
                 Context context = getApplicationContext();
-                CharSequence text = "No Internet Connection 2" +
+                CharSequence text = "Error loading page" +
                         "!";
                 int duration = Toast.LENGTH_SHORT;
 
@@ -336,26 +288,5 @@ public class SearchActivity extends AppCompatActivity {
         });
 
     }
-
-
-    private Boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
-    }
-
-    public boolean isOnline() {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
-            return (exitValue == 0);
-        } catch (IOException e)          { e.printStackTrace(); }
-        catch (InterruptedException e) { e.printStackTrace(); }
-        return false;
-    }
-
-
 
 }
