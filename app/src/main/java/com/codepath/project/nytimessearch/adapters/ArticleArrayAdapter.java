@@ -69,14 +69,14 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
 
         // Involves populating data into the item through holder
         //public void bind(final Article contact) {
-        public void bind(final Article contact) {
+        public void bind(final Article article) {
             TextView tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
-            tvTitle.setText(contact.getHeadline());
+            tvTitle.setText(article.getHeadline());
 
             ImageView imageView = itemView.findViewById(R.id.ivImage);
             imageView.setImageResource(0);
 
-            String thumbnail = contact.getThumbNail();
+            String thumbnail = article.getThumbNail();
             if (!thumbnail.isEmpty()) {
                 Glide.with(mContext)
                         .load(thumbnail)
