@@ -79,7 +79,7 @@ public class SearchActivity extends AppCompatActivity {
         searchFashion = fashion;
         searchSports = sports;
         Log.d("debug", "getResult");
-        if (!searchQuery.isEmpty()) {
+        if (searchQuery != null && !searchQuery.isEmpty()) {
             articles.clear();
             adapter.notifyDataSetChanged();
             scrollListener.resetState();
@@ -172,10 +172,14 @@ public class SearchActivity extends AppCompatActivity {
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
-        SearchView searchView = null;
+        /*SearchView searchView = null;
         if (searchItem != null) {
             searchView = (SearchView) searchItem.getActionView();
-        }
+        }*/
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+
+
+
         if (searchView != null) {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         }
@@ -183,8 +187,10 @@ public class SearchActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                Log.d("debug", "onQueryTextSubmit");
                 searchQuery = query;
                 onArticlesSearch(null, query);
+                searchView.clearFocus();
                 return false;
             }
             @Override

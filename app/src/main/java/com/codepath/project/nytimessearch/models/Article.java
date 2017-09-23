@@ -1,5 +1,7 @@
 package com.codepath.project.nytimessearch.models;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,7 +50,20 @@ public class Article {
 
             JSONArray multimedia = jsonObject.getJSONArray("multimedia");
             JSONArray newDeskObj = jsonObject.getJSONArray("keywords");
-            //newDeskObj.getString()
+
+            if (newDeskObj.length() > 0) {
+                Log.d("debug", "if block");
+                JSONObject test2 = newDeskObj.getJSONObject(0);
+
+                int size = newDeskObj.length();
+                for (int i = 0; i < size; i++) {
+                    Log.d("debug", newDeskObj.getJSONObject(i).toString());
+                }
+
+            } else {
+                Log.d("debug", "else block");
+            }
+
 
             if (multimedia.length() > 0) {
                 JSONObject multimediaJson = multimedia.getJSONObject(0);

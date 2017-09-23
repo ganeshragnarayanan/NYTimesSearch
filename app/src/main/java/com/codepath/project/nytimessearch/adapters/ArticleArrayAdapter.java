@@ -99,6 +99,7 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+
     private void configureViewHolder2(ViewHolderText vh2, int position) {
         //vh2.getImageView().setImageResource(R.drawable.sample_golden_gate);
         Article article = (Article) mContacts.get(position);
