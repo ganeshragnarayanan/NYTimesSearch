@@ -316,6 +316,14 @@ public class SearchActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         scrollListener.resetState();
 
+        if (isNetworkAvailable() == false || isOnline() == false) {
+            CharSequence text = "Check your internet connection";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(this, text, duration);
+            toast.show();
+        }
+
         RequestParams params = new RequestParams();
         params.put("api-key", "c232ab9374584104b91cc354d49784d4");
         params.put("page", page);
