@@ -23,25 +23,21 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
 
     private Context mContext;
     private ArrayList<Article> mContacts;
-    //private ArrayList<Contact> mContacts;
 
     public ArticleArrayAdapter(Context context, ArrayList<Article> contacts) {
         mContext = context;
         mContacts = contacts;
-        //super(context, android.R.layout.simple_list_item_1, contacts);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_article_results, parent, false);
         return new ViewHolder(view);
-
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Article contact = mContacts.get(position);
-        //Contact contact = mContacts.get(position);
         holder.bind(contact);
     }
 
@@ -69,82 +65,26 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
             ImageView imageView = itemView.findViewById(R.id.ivImage);
             imageView.setImageResource(0);
             TextView tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
-            tvTitle.setText("test");
-
         }
 
         // Involves populating data into the item through holder
         //public void bind(final Article contact) {
         public void bind(final Article contact) {
-            //tvName.setText(contact.getHeadline());
             TextView tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
             tvTitle.setText(contact.getHeadline());
 
             ImageView imageView = itemView.findViewById(R.id.ivImage);
             imageView.setImageResource(0);
 
-
             String thumbnail = contact.getThumbNail();
             if (!thumbnail.isEmpty()) {
-                //Picasso.with(mContext).load(thumbnail).into(imageView);
-
                 Glide.with(mContext)
                         .load(thumbnail)
                         .placeholder(R.drawable.ic_nocover)
                         .into(imageView);
             }
-
-
-
-            /*if (!thumbnail.isEmpty()) {
-                Picasso.with(mContext)
-                        .load(thumbnail)
-                        .centerCrop() // or centerInside()
-                        .into(imageView);
-            }*/
-
-
-           /* btnOnline.setText("hai");
-            btnOnline.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(mContext, "hello", Toast.LENGTH_SHORT).show();
-                }
-            });*/
         }
     }
 
 }
-
-
-/*public class ArticleArrayAdapter extends ArrayAdapter<Article> {
-
-    public ArticleArrayAdapter(Context context, List<Article> articles) {
-        super(context, android.R.layout.simple_list_item_1, articles);
-    }
-
-    @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Article article = this.getItem(position);
-
-        if (convertView == null) {
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.item_article_results, parent, false);
-        }
-
-        ImageView imageView = convertView.findViewById(R.id.ivImage);
-        imageView.setImageResource(0);
-        TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-        tvTitle.setText(article.getHeadline());
-
-        String thumbnail = article.getThumbNail();
-
-        if (!TextUtils.isEmpty(thumbnail)) {
-            Picasso.with(getContext()).load(thumbnail).into(imageView);
-
-        }
-        return convertView;
-
-    }
-}*/
 
