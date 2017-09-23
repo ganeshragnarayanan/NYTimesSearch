@@ -112,7 +112,7 @@ public class EditNameDialogFragment extends DialogFragment  implements DatePicke
         Button btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
         btnSubmit.requestFocus();
 
-        etDate.setOnClickListener(new View.OnClickListener() {
+        etDate.setOnClickListener (new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
