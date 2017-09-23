@@ -178,6 +178,37 @@ public class SearchActivity extends AppCompatActivity {
         params.put("page", offset);
         params.put("q", searchQuery);
 
+        String newsDesk = "news_desk:(";
+        String newsCategories = "";
+
+        if (!searchDate1.isEmpty()) {
+            params.put("begin_date", searchDate1);
+        }
+
+        if (!searchOrder1.isEmpty()) {
+            params.put("sort", searchOrder1);
+        }
+
+        if (searchArts) {
+            newsCategories += "\"Arts\"";
+        }
+
+        if (searchSports) {
+            newsCategories += " \"Sports\"";
+        }
+
+        if (searchFashion) {
+            newsCategories += " \"Fashion\"";
+        }
+
+        if (searchArts || searchFashion || searchSports) {
+            params.put("fq", newsDesk + newsCategories + ")");
+        }
+        //params.put("fq", "news_desk:(\"Arts\" \"Sports\" \"Fashion\" \"Style\")");
+
+        Log.d("debug", "Query Parameters");
+        Log.d("debug", params.toString());
+
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -265,12 +296,6 @@ public class SearchActivity extends AppCompatActivity {
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
 
-        String a = searchDate1;
-        String b = searchOrder1;
-        Boolean c = searchArts;
-        Boolean d = searchFashion;
-        Boolean e = searchSports;
-
         String newsDesk = "news_desk:(";
         String newsCategories = "";
 
@@ -292,10 +317,6 @@ public class SearchActivity extends AppCompatActivity {
         if (!searchOrder1.isEmpty()) {
             params.put("sort", searchOrder1);
         }
-
-        Log.d("debug", "sort_order:");
-        Log.d("debug", searchOrder1);
-
 
         if (searchArts) {
             newsCategories += "\"Arts\"";
