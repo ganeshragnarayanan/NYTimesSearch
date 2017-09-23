@@ -58,7 +58,6 @@ public class SearchActivity extends AppCompatActivity {
     // filters
     String searchDate1 = "";
     String searchOrder1 = "";
-    String searchCategory1 = "";
     boolean searchArts;
     boolean searchFashion;
     boolean searchSports;
@@ -191,81 +190,8 @@ public class SearchActivity extends AppCompatActivity {
     public void loadNextDataFromApi(int offset) {
         //fetchArticles(searchQuery, offset);
 
-        //AsyncHttpClient client = new AsyncHttpClient();
-        String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
+        fetchArticlesFromWeb(searchQuery, offset);
 
-        RequestParams params = new RequestParams();
-        params.put("api-key", "c232ab9374584104b91cc354d49784d4");
-        params.put("page", offset);
-        params.put("q", searchQuery);
-
-        String newsDesk = "news_desk:(";
-        String newsCategories = "";
-
-        if (!searchDate1.isEmpty()) {
-            params.put("begin_date", searchDate1);
-        }
-
-        if (!searchOrder1.isEmpty()) {
-            params.put("sort", searchOrder1);
-        }
-
-        if (searchArts) {
-            newsCategories += "\"Arts\"";
-        }
-
-        if (searchSports) {
-            newsCategories += " \"Sports\"";
-        }
-
-        if (searchFashion) {
-            newsCategories += " \"Fashion\"";
-        }
-
-        if (searchArts || searchFashion || searchSports) {
-            params.put("fq", newsDesk + newsCategories + ")");
-        }
-        //params.put("fq", "news_desk:(\"Arts\" \"Sports\" \"Fashion\" \"Style\")");
-
-        Log.d("debug", "Query Parameters");
-        Log.d("debug", params.toString());
-
-        client = new ArticleClient();
-        client.getArticles(url, params, new JsonHttpResponseHandler() {
-
-        //client.get(url, params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                //super.onSuccess(statusCode, headers, response);
-                Log.d("debug", "on success");
-                JSONArray articlesResults = null;
-                try {
-                    articlesResults = response.getJSONObject("response").getJSONArray("docs");
-                    //adapter.addAll(Article.fromJsonArray(articlesResults));
-                    ArrayList<Article> results = Article.fromJsonArray(articlesResults);
-                    articles.addAll(results);
-                    adapter.notifyDataSetChanged();
-
-                    //adapter.notifyDataSetChanged();
-
-                } catch (JSONException e) {
-                    Log.d("debug", "got exception $$$$$$$$$$$$$$$$$$$$$$$$$");
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
-                Context context = getApplicationContext();
-                CharSequence text = "No Internet Connection 2" +
-                        "!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-            }
-
-        });
     }
 
     @Override
@@ -312,23 +238,26 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void onArticlesSearch(View view, String query) {
-        fetchArticles(query, 0);
-    }
-
-    public void fetchArticles(String query, int page) {
-
-        //AsyncHttpClient client = new AsyncHttpClient();
-        String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
-
-        String newsDesk = "news_desk:(";
-        String newsCategories = "";
-
-////https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=20160112
-/// &sort=oldest&fq=news_desk:("Arts" "Sports" "Fashion" "Style")&page=2&api-key=227c750bb7714fc39ef1559ef1bd8329
 
         articles.clear();
         adapter.notifyDataSetChanged();
         scrollListener.resetState();
+
+        fetchArticlesFromWeb(query, 0);
+    }
+
+    public void fetchArticles(String query, int page) {
+
+
+
+    }
+
+
+    public void fetchArticlesFromWeb(String query, int page) {
+        String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
+
+        String newsDesk = "news_desk:(";
+        String newsCategories = "";
 
         if (isNetworkAvailable() == false || isOnline() == false) {
             CharSequence text = "Check your internet connection";
@@ -365,26 +294,11 @@ public class SearchActivity extends AppCompatActivity {
         if (searchArts || searchFashion || searchSports) {
             params.put("fq", newsDesk + newsCategories + ")");
         }
-        //params.put("fq", "news_desk:(\"Arts\" \"Sports\" \"Fashion\" \"Style\")");
-
-        Log.d("debug", "Query Parameters");
-        Log.d("debug", params.toString());
 
 
-        /*
-        *
-        * client = new BookClient();
-        client.getBooks(query, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-        *
-        *
-        * */
         client = new ArticleClient();
         client.getArticles(url, params, new JsonHttpResponseHandler() {
 
-        //client.get(url, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 JSONArray articlesResults = null;
@@ -420,6 +334,7 @@ public class SearchActivity extends AppCompatActivity {
                 toast.show();
             }
         });
+
     }
 
 

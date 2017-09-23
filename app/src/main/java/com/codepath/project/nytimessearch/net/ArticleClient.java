@@ -9,7 +9,7 @@ import com.loopj.android.http.RequestParams;
  */
 
 public class ArticleClient {
-    private static final String API_BASE_URL = "http://openlibrary.org/";
+    private static final String API_BASE_URL = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
     private AsyncHttpClient client;
 
     public ArticleClient() {
