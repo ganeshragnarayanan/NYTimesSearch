@@ -179,10 +179,7 @@ public class EditNameDialogFragment extends DialogFragment  implements DatePicke
                 dismiss();
             }
 
-            DatePickerDialog.OnDateSetListener ondate = new  DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                }
+            DatePickerDialog.OnDateSetListener ondate = (view1, year, monthOfYear, dayOfMonth) -> {
             };
         });
 
