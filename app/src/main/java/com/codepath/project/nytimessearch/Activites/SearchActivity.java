@@ -78,6 +78,14 @@ public class SearchActivity extends AppCompatActivity {
         searchArts = arts;
         searchFashion = fashion;
         searchSports = sports;
+        Log.d("debug", "getResult");
+        if (!searchQuery.isEmpty()) {
+            articles.clear();
+            adapter.notifyDataSetChanged();
+            scrollListener.resetState();
+            fetchArticlesFromWeb(searchQuery, 0);
+        }
+
     }
 
     /* invoke the filters dialog */
@@ -194,7 +202,9 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void onComposeAction(MenuItem mi) {
+        Log.d("debug", "first");
         showEditDialog();
+        Log.d("debug", "second");
     }
 
     public void onArticlesSearch(View view, String query) {
@@ -258,7 +268,18 @@ public class SearchActivity extends AppCompatActivity {
                     articlesResults = response.getJSONObject("response").getJSONArray("docs");
                     ArrayList<Article> results = Article.fromJsonArray(articlesResults);
                     articles.addAll(results);
-                    adapter.notifyDataSetChanged();
+                    //adapter.notifyDataSetChanged();
+                    adapter.notifyItemRangeInserted(adapter.getItemCount(), articles.size() - 1);
+
+                    /*final int curSize = adapter.getItemCount();
+                    view.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyItemRangeInserted(curSize, articles.size() - 1);
+                        }
+                    });*/
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
