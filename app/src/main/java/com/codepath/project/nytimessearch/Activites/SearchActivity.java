@@ -24,14 +24,14 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.codepath.project.nytimessearch.models.Article;
-import com.codepath.project.nytimessearch.adapters.ArticleArrayAdapter;
-import com.codepath.project.nytimessearch.fragments.EditNameDialogFragment;
-import com.codepath.project.nytimessearch.utils.EndlessRecyclerViewScrollListener;
 import com.codepath.project.nytimessearch.R;
+import com.codepath.project.nytimessearch.adapters.ArticleArrayAdapter;
 import com.codepath.project.nytimessearch.decorators.SpacesItemDecoration;
+import com.codepath.project.nytimessearch.fragments.EditNameDialogFragment;
+import com.codepath.project.nytimessearch.models.Article;
+import com.codepath.project.nytimessearch.net.ArticleClient;
+import com.codepath.project.nytimessearch.utils.EndlessRecyclerViewScrollListener;
 import com.codepath.project.nytimessearch.utils.RecyclerItemClickListener;
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -62,6 +62,7 @@ public class SearchActivity extends AppCompatActivity {
     boolean searchArts;
     boolean searchFashion;
     boolean searchSports;
+    private ArticleClient client;
 
     String searchQuery;
 
@@ -190,7 +191,7 @@ public class SearchActivity extends AppCompatActivity {
     public void loadNextDataFromApi(int offset) {
         //fetchArticles(searchQuery, offset);
 
-        AsyncHttpClient client = new AsyncHttpClient();
+        //AsyncHttpClient client = new AsyncHttpClient();
         String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
 
         RequestParams params = new RequestParams();
@@ -229,7 +230,10 @@ public class SearchActivity extends AppCompatActivity {
         Log.d("debug", "Query Parameters");
         Log.d("debug", params.toString());
 
-        client.get(url, params, new JsonHttpResponseHandler() {
+        client = new ArticleClient();
+        client.getArticles(url, params, new JsonHttpResponseHandler() {
+
+        //client.get(url, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 //super.onSuccess(statusCode, headers, response);
@@ -313,7 +317,7 @@ public class SearchActivity extends AppCompatActivity {
 
     public void fetchArticles(String query, int page) {
 
-        AsyncHttpClient client = new AsyncHttpClient();
+        //AsyncHttpClient client = new AsyncHttpClient();
         String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
 
         String newsDesk = "news_desk:(";
@@ -366,7 +370,21 @@ public class SearchActivity extends AppCompatActivity {
         Log.d("debug", "Query Parameters");
         Log.d("debug", params.toString());
 
-        client.get(url, params, new JsonHttpResponseHandler() {
+
+        /*
+        *
+        * client = new BookClient();
+        client.getBooks(query, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+        *
+        *
+        * */
+        client = new ArticleClient();
+        client.getArticles(url, params, new JsonHttpResponseHandler() {
+
+        //client.get(url, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 JSONArray articlesResults = null;
