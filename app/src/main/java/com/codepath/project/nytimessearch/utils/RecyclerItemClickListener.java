@@ -1,4 +1,4 @@
-package com.codepath.project.nytimessearch;
+package com.codepath.project.nytimessearch.utils;
 
 /**
  * Created by GANESH on 9/20/17.

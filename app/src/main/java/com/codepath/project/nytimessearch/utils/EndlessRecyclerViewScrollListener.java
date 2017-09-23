@@ -1,4 +1,4 @@
-package com.codepath.project.nytimessearch;
+package com.codepath.project.nytimessearch.utils;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;

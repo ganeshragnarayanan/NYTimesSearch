@@ -24,13 +24,13 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.codepath.project.nytimessearch.Article;
-import com.codepath.project.nytimessearch.ArticleArrayAdapter;
-import com.codepath.project.nytimessearch.Contact;
-import com.codepath.project.nytimessearch.EditNameDialogFragment;
-import com.codepath.project.nytimessearch.EndlessRecyclerViewScrollListener;
+import com.codepath.project.nytimessearch.models.Article;
+import com.codepath.project.nytimessearch.adapters.ArticleArrayAdapter;
+import com.codepath.project.nytimessearch.fragments.EditNameDialogFragment;
+import com.codepath.project.nytimessearch.utils.EndlessRecyclerViewScrollListener;
 import com.codepath.project.nytimessearch.R;
-import com.codepath.project.nytimessearch.SpacesItemDecoration;
+import com.codepath.project.nytimessearch.decorators.SpacesItemDecoration;
+import com.codepath.project.nytimessearch.utils.RecyclerItemClickListener;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -53,7 +53,6 @@ public class SearchActivity extends AppCompatActivity {
     Button btnSearch;
     ArrayList<Article> articles;
     ArticleArrayAdapter adapter;
-    ArrayList<Contact> contacts;
     private EndlessRecyclerViewScrollListener scrollListener;
 
     // filters
@@ -156,7 +155,7 @@ public class SearchActivity extends AppCompatActivity {
         rvResults.addOnScrollListener(scrollListener);
 
         rvResults.addOnItemTouchListener(
-                new com.codepath.project.nytimessearch.RecyclerItemClickListener(this, rvResults, new com.codepath.project.nytimessearch.RecyclerItemClickListener.OnItemClickListener() {
+                new RecyclerItemClickListener(this, rvResults, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         Log.d("debug", "onclick");

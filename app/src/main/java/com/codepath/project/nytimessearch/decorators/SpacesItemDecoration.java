@@ -1,4 +1,4 @@
-package com.codepath.project.nytimessearch;
+package com.codepath.project.nytimessearch.decorators;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;

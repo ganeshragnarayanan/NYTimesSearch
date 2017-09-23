@@ -1,4 +1,4 @@
-package com.codepath.project.nytimessearch;
+package com.codepath.project.nytimessearch.fragments;
 
 /**
  * Created by GANESH on 9/20/17.
@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.codepath.project.nytimessearch.Activites.SearchActivity;
+import com.codepath.project.nytimessearch.R;
 
 import java.util.Calendar;
 
