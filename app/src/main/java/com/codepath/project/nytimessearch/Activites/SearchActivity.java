@@ -174,13 +174,7 @@ public class SearchActivity extends AppCompatActivity {
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
-        /*SearchView searchView = null;
-        if (searchItem != null) {
-            searchView = (SearchView) searchItem.getActionView();
-        }*/
         final SearchView searchView = (SearchView) searchItem.getActionView();
-
-
 
         if (searchView != null) {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -257,6 +251,7 @@ public class SearchActivity extends AppCompatActivity {
 
         if (searchFashion) {
             newsCategories += " \"Fashion\"";
+            newsCategories += " \"Style\"";
         }
 
         if (searchArts || searchFashion || searchSports) {
@@ -273,18 +268,7 @@ public class SearchActivity extends AppCompatActivity {
                     articlesResults = response.getJSONObject("response").getJSONArray("docs");
                     ArrayList<Article> results = Article.fromJsonArray(articlesResults);
                     articles.addAll(results);
-                    //adapter.notifyDataSetChanged();
                     adapter.notifyItemRangeInserted(adapter.getItemCount(), articles.size() - 1);
-
-                    /*final int curSize = adapter.getItemCount();
-                    view.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.notifyItemRangeInserted(curSize, articles.size() - 1);
-                        }
-                    });*/
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -292,17 +276,16 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                Context context = getApplicationContext();
-                CharSequence text = "Error loading page";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                generateToast();
             }
 
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
+                generateToast();
+            }
+
+            public void generateToast() {
                 Context context = getApplicationContext();
                 CharSequence text = "Error loading page" +
                         "!";

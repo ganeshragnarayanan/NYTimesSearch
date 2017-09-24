@@ -73,13 +73,6 @@ public class Article {
                 this.thumbNail = "";
 
             }
-
-            /*if (newDeskObj.length() > 0) {
-                this.newdesk =  newDeskObj.get.getJ("new_desk");
-
-            }*/
-
-
         } catch (JSONException e){
 
         }

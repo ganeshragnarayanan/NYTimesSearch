@@ -2,7 +2,6 @@ package com.codepath.project.nytimessearch.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import java.util.ArrayList;
  * Created by GANESH on 9/19/17.
  */
 
-//public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapter.ViewHolder> {
 public class ArticleArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
@@ -33,9 +31,6 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        /*View view = LayoutInflater.from(mContext).inflate(R.layout.item_article_results, parent, false);
-        return new ViewHolder(view);*/
-
         RecyclerView.ViewHolder viewHolder;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
@@ -58,17 +53,12 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        /*Article contact = mContacts.get(position);
-        holder.bind(contact);*/
-
         switch (holder.getItemViewType()) {
             case IMAGE:
-                Log.d("debug", "case image");
                 ViewHolder vh1 = (ViewHolder) holder;
                 configureViewHolder1(vh1, position);
                 break;
             case TEXT:
-                Log.d("debug", "case text");
                 ViewHolderText vh2 = (ViewHolderText) holder;
                 configureViewHolder2(vh2, position);
                 break;
@@ -82,7 +72,6 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         Article article = (Article) mContacts.get(position);
         if (article != null) {
 
-            //vh1.getLabel2().setText("Hometown: " + user.hometown);
             ImageView imageView = (ImageView) vh1.getIvImage();
             TextView tvTitle = (TextView) vh1.getTvTitle();
 
@@ -101,11 +90,9 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
     private void configureViewHolder2(ViewHolderText vh2, int position) {
-        //vh2.getImageView().setImageResource(R.drawable.sample_golden_gate);
         Article article = (Article) mContacts.get(position);
         if (article != null) {
 
-            //vh1.getLabel2().setText("Hometown: " + user.hometown);
             TextView tvTitle = (TextView) vh2.getTvArticleText();
 
             tvTitle.setText(article.getHeadline());
@@ -153,10 +140,6 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public ViewHolder(View itemView) {
 
             super(itemView);
-
-            /*ImageView imageView = itemView.findViewById(R.id.ivImage);
-            imageView.setImageResource(0);
-            TextView tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);*/
 
             ivImage = itemView.findViewById(R.id.ivImage);
             tvTitle = itemView.findViewById(R.id.tvTitle);

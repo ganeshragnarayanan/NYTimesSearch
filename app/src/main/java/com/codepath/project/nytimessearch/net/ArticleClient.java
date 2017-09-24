@@ -27,14 +27,7 @@ public class ArticleClient {
 
     // Method for accessing the search API
     public void getArticles(RequestParams params, JsonHttpResponseHandler handler) {
-
-       // try {
-            //String url = getApiUrl("search.json?q=");
-            //client.get(url + URLEncoder.encode(query, "utf-8"), handler);
-            client.get(API_BASE_URL, params, handler);
-        /*} catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }*/
+        client.get(API_BASE_URL, params, handler);
     }
 
     public Boolean isNetworkAvailable() {
