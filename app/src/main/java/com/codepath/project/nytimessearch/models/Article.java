@@ -88,8 +88,7 @@ public class Article {
     public static ArrayList<Article> fromJsonArray(JSONArray array) {
         ArrayList<Article> results = new ArrayList<>();
 
-        //for (int x=0;x<array.length();x++) {
-        for (int x=0;x<4;x++) {
+        for (int x=0;x<array.length();x++) {
             try {
                 results.add(new Article(array.getJSONObject(x)));
             } catch (JSONException e) {
