@@ -9,11 +9,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,7 +77,7 @@ public class SearchActivity extends AppCompatActivity {
         searchArts = arts;
         searchFashion = fashion;
         searchSports = sports;
-        Log.d("debug", "getResult");
+
         if (searchQuery != null && !searchQuery.isEmpty()) {
             articles.clear();
             adapter.notifyDataSetChanged();
@@ -115,8 +114,12 @@ public class SearchActivity extends AppCompatActivity {
 
         rvResults.setAdapter(adapter);
 
-        StaggeredGridLayoutManager gridLayoutManger = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        //StaggeredGridLayoutManager gridLayoutManger = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        //rvResults.setLayoutManager(gridLayoutManger);
+
+        GridLayoutManager gridLayoutManger = new GridLayoutManager(this, 2);
         rvResults.setLayoutManager(gridLayoutManger);
+
 
         RecyclerView.ItemDecoration itemDecoration = new
                 DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
@@ -128,7 +131,6 @@ public class SearchActivity extends AppCompatActivity {
         scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManger) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                Log.d("debug", "onLoadMore");
                 loadNextDataFromApi(page);
             }
         };
@@ -187,7 +189,6 @@ public class SearchActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.d("debug", "onQueryTextSubmit");
                 searchQuery = query;
                 onArticlesSearch(null, query);
                 searchView.clearFocus();
@@ -208,9 +209,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void onComposeAction(MenuItem mi) {
-        Log.d("debug", "first");
         showEditDialog();
-        Log.d("debug", "second");
     }
 
     public void onArticlesSearch(View view, String query) {

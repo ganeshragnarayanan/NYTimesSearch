@@ -22,10 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Activites.ArticleActivity"
-            android:label="@string/title_activity_article"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

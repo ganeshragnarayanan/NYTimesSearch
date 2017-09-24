@@ -108,7 +108,7 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             //vh1.getLabel2().setText("Hometown: " + user.hometown);
             TextView tvTitle = (TextView) vh2.getTvArticleText();
 
-            tvTitle.setText(article.getSnippet());
+            tvTitle.setText(article.getHeadline());
         }
     }
 
